@@ -17,22 +17,57 @@ define magento(
 
   $root = '/home/magento/sites/berbatik'
   $mysql_host = 'localhost'
-  $mysql_user = 'berbatik_magento'
+  $mysql_user = 'berbatik'
   $mysql_password = 'bippo'
   $mysql_dbname = 'berbatik_magento'
   $url = 'http://www.berbatik.com.vm/'
+  $use_rewrites = 'yes'
   $secure_url = 'http://www.berbatik.com.vm/'
   $admin_firstname = 'Berbatik'
   $admin_lastname = 'Sysadmin'
-  $admin_email = 'admin@berbatik.com.vm'
+  $admin_email = 'hendy+berbatik@soluvas.com' # admin@berbatik.com.vm is not valid email, WTF?
   $admin_username = 'sysadmin'
   $admin_password = 'admin123'
 
+  file { '/home/magento/scripts/extract-magento.sh':
+  	ensure => file,
+  	source => 'puppet:///modules/magento/extract-magento.sh',
+  	owner  => magento,
+    group  => magento,
+    mode   => 0755,
+  }
+
   if $install {
+
+    # TODO: No download or install is need if Magento is already setup
+  	file { magento-dist:
+  	  name   => '/home/magento/dist',
+  	  ensure => directory,
+  	  owner  => magento,
+  	  group  => magento,
+  	}
+  	exec { download-magento:
+      cwd       => '/home/magento/dist',
+      creates   => '/home/magento/dist/magento-bippo-1.6.2.0_1.tar.gz',
+  	  command   => 'wget http://192.168.66.17:8080/nexus/service/local/repositories/releases/content/id/co/bippo/commerce/magento-bippo/1.6.2.0_1/magento-bippo-1.6.2.0_1.tar.gz',
+  	  path      => ['/usr/local/bin', '/usr/bin'],
+  	  logoutput => true,
+  	  user      => 'magento',
+  	  require   => File['magento-dist'],
+  	}
+  	exec { extract-magento:
+      creates     => '/home/magento/sites/berbatik',
+  	  command     => '/home/magento/scripts/extract-magento.sh /home/magento/sites/berbatik',
+  	  logoutput   => true,
+  	  user        => 'magento',
+  	  environment => ['HOME=/home/magento'],
+  	  require     => [ Exec['download-magento'], File['/home/magento/scripts/extract-magento.sh'] ],
+  	}
+
     exec { install-magento:
       cwd => $root,
       creates => "${root}/app/etc/local.xml",
-      path => '/usr/bin',
+  	  path      => ['/usr/local/bin', '/usr/bin'],
       command => "php -f install.php -- \
         --license_agreement_accepted \"yes\" \
         --locale \"id_ID\" \
@@ -55,8 +90,18 @@ define magento(
         --admin_password \"${admin_password}\"",
       logoutput => true,
       user => 'magento',
-      require => [Exec["setting-permissions"], Exec["create-magentodb-db"]],
+      require => [ Exec['extract-magento'] ],
+      #require => [Exec["setting-permissions"], Exec["create-magentodb-db"]],
     }
+
+    file { '/home/magento/sites/berbatik/app/etc/local.xml':
+      ensure  => file,
+      owner   => magento,
+      group   => magento,
+      mode    => 0400,
+      require => Exec['install-magento'],
+    }
+
   }
 
 }
