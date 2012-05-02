@@ -1,0 +1,7 @@
+h1. magento
+
+This is the magento module.
+
+h2. Credits
+
+Original code from: https://github.com/cmuench/Magento-Vagrant-Puppet
