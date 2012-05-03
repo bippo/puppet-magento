@@ -11,8 +11,7 @@
 # Sample Usage:
 #
 # [Remember: No empty lines between comments and class definition]
-define magento(
-  $install = false
+define magento::install(
 ) {
 
   $root = '/home/magento/sites/berbatik'
@@ -43,8 +42,6 @@ define magento(
     mode    => 0755,
     require => File['/home/magento/scripts'],
   }
-
-  if $install {
 
     # TODO: No download or install is need if Magento is already setup
   	file { magento-dist:
@@ -109,6 +106,30 @@ define magento(
       require => Exec['install-magento'],
     }
 
+}
+
+# Refresh execs
+define magento(
+  $dir  = '/home/magento/sites/berbatik',
+  $user = 'magento'
+) {
+
+  exec { "magento cache-clear ${dir}":
+    cwd         => $dir,
+    command     => "wiz cache-clear",
+    path        => ['/usr/local/bin', '/usr/bin', '/bin'], # requires readlink, which is in /bin
+    user        => $user,
+    logoutput   => true,
+    refreshonly => true,
+  }
+
+  exec { "magento compiler-compile ${dir}":
+    cwd         => $dir,
+    command     => "php shell/compiler.php compile",
+    path        => ['/usr/local/bin', '/usr/bin', '/bin'],
+    user        => $user,
+    logoutput   => true,
+    refreshonly => true,
   }
 
 }

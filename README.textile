@@ -13,6 +13,17 @@ Git clones *wiz* from git://github.com/bippo/wiz.git
 Puts it in @/usr/share/wiz@
 And creates a symlink in @/usr/bin/wiz@
 
+h2. magento::deploy
+
+bc. magento::deploy { 'berbatik_id':
+  marker_file => 'app/locale/id_ID',
+  git_url     => 'git://github.com/bippo/magento-id.git',
+  git_name    => 'magento-id',
+  magento_dir => '/home/magento/sites/berbatik',
+  require     => Magento['berbatik'],
+}
+
+
 h2. Credits
 
 Original code from: https://github.com/cmuench/Magento-Vagrant-Puppet
