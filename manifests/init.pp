@@ -29,12 +29,19 @@ define magento(
   $admin_username = 'sysadmin'
   $admin_password = 'admin123'
 
-  file { '/home/magento/scripts/extract-magento.sh':
-  	ensure => file,
-  	source => 'puppet:///modules/magento/extract-magento.sh',
+  file { '/home/magento/scripts':
+  	ensure => directory,
   	owner  => magento,
     group  => magento,
     mode   => 0755,
+  }
+  file { '/home/magento/scripts/extract-magento.sh':
+  	ensure  => file,
+  	source  => 'puppet:///modules/magento/extract-magento.sh',
+  	owner   => magento,
+    group   => magento,
+    mode    => 0755,
+    require => File['/home/magento/scripts'],
   }
 
   if $install {
