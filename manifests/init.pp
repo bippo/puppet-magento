@@ -12,6 +12,8 @@
 #
 # [Remember: No empty lines between comments and class definition]
 define magento::install(
+  # URI of Magento distribution package
+  $dist_uri = 'http://33.33.33.1:8080/nexus/service/local/repositories/releases/content/id/co/bippo/commerce/magento-bippo/1.6.2.0_1/magento-bippo-1.6.2.0_1.tar.gz'
 ) {
 
   $root = '/home/magento/sites/berbatik'
@@ -53,7 +55,7 @@ define magento::install(
   	exec { download-magento:
       cwd       => '/home/magento/dist',
       creates   => '/home/magento/dist/magento-bippo-1.6.2.0_1.tar.gz',
-  	  command   => 'wget http://192.168.66.17:8080/nexus/service/local/repositories/releases/content/id/co/bippo/commerce/magento-bippo/1.6.2.0_1/magento-bippo-1.6.2.0_1.tar.gz',
+  	  command   => "wget '${dist_uri}'",
   	  path      => ['/usr/local/bin', '/usr/bin'],
   	  logoutput => true,
   	  user      => 'magento',
