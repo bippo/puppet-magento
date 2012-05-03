@@ -2,6 +2,19 @@ h1. magento
 
 This is the magento module.
 
+h2. magento::wiz
+
+Depends on git package:
+
+bc. package { git: ensure => present }
+include magento::wiz
+
+Git clones *wiz* from git://github.com/bippo/wiz.git
+Puts it in @/usr/share/wiz@
+And creates a symlink in @/usr/bin/wiz@
+
 h2. Credits
 
 Original code from: https://github.com/cmuench/Magento-Vagrant-Puppet
+
+Magento nginx site configuration from: http://www.magentocommerce.com/wiki/1_-_installation_and_configuration/configuring_nginx_for_magento
