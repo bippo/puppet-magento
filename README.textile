@@ -1,6 +1,12 @@
-h1. magento
+h1. Magento module for Puppet
 
-This is the magento module.
+@magento@ define is mandatory for magento::app, magento::errors.
+
+bc.   magento { dietyuk:
+    dir          => '/home/magento/sites/dietyuk',
+    user         => magento,
+  }
+ 
 
 h2. magento::wiz
 
@@ -16,6 +22,8 @@ And creates a symlink in @/usr/bin/wiz@
 
 h2. magento::app
 
+Configures the @app/etc/local.xml@ file.
+
 bc.   magento::app { dietyuk:
     dir          => '/home/magento/sites/dietyuk',
     install_date => 'Wed, 09 Jun 2010 16:53:10 +0000',
@@ -29,6 +37,8 @@ bc.   magento::app { dietyuk:
 
 
 h2. magento::errors
+
+Configures the @errors/local.xml@ file.
 
 bc. magento::errors { 'dietyuk':
    dir   => '/home/magento/sites/dietyuk',
