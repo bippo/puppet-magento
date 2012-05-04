@@ -123,6 +123,7 @@ define magento(
     user        => $user,
     logoutput   => true,
     refreshonly => true,
+    require     => Class['magento::wiz'],
   }
 
   exec { "magento compiler-compile ${dir}":

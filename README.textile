@@ -19,6 +19,8 @@ Git clones *wiz* from git://github.com/bippo/wiz.git
 Puts it in @/usr/share/wiz@
 And creates a symlink in @/usr/bin/wiz@
 
+Wiz is required by @magento@ to clear cache.
+
 
 h2. magento::app
 
