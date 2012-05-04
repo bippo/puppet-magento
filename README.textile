@@ -13,6 +13,21 @@ Git clones *wiz* from git://github.com/bippo/wiz.git
 Puts it in @/usr/share/wiz@
 And creates a symlink in @/usr/bin/wiz@
 
+
+h2. magento::app
+
+bc.   magento::app { dietyuk:
+    dir          => 'sites/dietyuk',
+    install_date => 'Wed, 09 Jun 2010 16:53:10 +0000',
+    crypt_key    => '69d754585*****',
+    db_host      => 'localhost',
+    db_user      => 'dietyuk',
+    db_password  => '****',
+    db_name      => 'dietyuk_magento',
+    session_save => 'db',
+  }
+
+
 h2. magento::deploy
 
 bc. magento::deploy { 'berbatik_id':
@@ -21,6 +36,14 @@ bc. magento::deploy { 'berbatik_id':
   git_name    => 'magento-id',
   magento_dir => '/home/magento/sites/berbatik',
   require     => Magento['berbatik'],
+}
+
+
+h2. magento::errors
+
+bc. magento::errors { 'dietyuk':
+   dir   => 'sites/dietyuk',
+   email => 'commerce-sysadmin+dietyuk@bippo.co.id',
 }
 
 
