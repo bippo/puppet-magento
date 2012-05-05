@@ -23,6 +23,10 @@
             </default_setup>
         </resources>
         <session_save><![CDATA[<%= session_save %>]]></session_save>
+        <cache>
+            <backend>apc</backend>
+            <prefix><%= db_user %>_</prefix>
+        </cache>
     </global>
     <admin>
         <routers>
